@@ -1,6 +1,6 @@
-const userProductApi = "https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/products";
+const userProductApi = "https://livejs-api.hexschool.io/api/livejs/v1/customer/lelejpinyi/products";
 function getProductList() {
-  axios.get("https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/products")
+  axios.get(userProductApi)
     .then((res) => {
       console.log(res);
     })
