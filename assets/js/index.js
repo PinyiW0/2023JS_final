@@ -50,14 +50,14 @@ function renderProductList() {
 };
 
 //下拉選單
-productSelect.addEventListener('change', function (e) {
+productSelect.addEventListener("change", (e) => {
   const category = e.target.value;
   if (category == "全部") {
     renderProductList();
     return;
   }
   let str = "";
-  productData.forEach(function (item) {
+  productData.forEach((item) => {
     if (item.category == category) {
       str += combineProductHTMLItem(item);
     }
