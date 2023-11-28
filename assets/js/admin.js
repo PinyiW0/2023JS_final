@@ -19,11 +19,16 @@ let chart = c3.generate({
     }
   },
 });
+
 import axios from "axios";
 import { api_path, token } from "./config";
 
 let orderData = [];
 const orderList = document.querySelector(".js-orderList");
+function init(){
+  getOrderList();
+};
+init();
 function getOrderList() {
   axios.get(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`,{
     headers:{
@@ -31,27 +36,78 @@ function getOrderList() {
     }
   })
   .then((res) => {
-     orderData = res.data.orders;
-     let str ='';
-    str += `<tr>
-          <td>10088377474</td>
-          <td>
-            <p>小杰</p>
-            <p>0912345678</p>
-          </td>
-          <td>高雄市前鎮區六合路183巷66號</td>
-          <td>cccexample@gmail.com</td>
-          <td>
-            <p>Louvre 雙人床架</p>
-          </td>
-          <td>2021/03/08</td>
-          <td class="orderStatus">
-            <a href="#">未處理</a>
-          </td>
-          <td>
-            <input type="button" class="delSingleOrder-Btn" value="刪除">
-          </td>
-        </tr>`
+    console.log(res.data)
+    orderData = res.data.orders;
+    console.log(orderData);
+    let str ='';
+    orderData.forEach((item) => {
+      //組產品字串
+      let productStr = "";
+      item.products.forEach((productItem) => {
+        productStr += `<p>${productItem.title}x${productItem.quantity}</p>`
+      })
+      //判斷訂單處理狀態
+      let orderStatus = "";
+      orderStatus = item.paid ? "已處理" : "未處理";
+      //組訂單字串
+      str += `<tr>
+        <td>${item.id}</td>
+        <td>
+          <p>${item.user.name}</p>
+          <p>${item.user.tel}</p>
+        </td>
+        <td>${item.user.address}</td>
+        <td>${item.user.email}</td>
+        <td>
+          ${productStr}
+        </td>
+        <td>${item.createdAt}</td>
+        <td class="js-orderStatus">
+          <a href="#" data-status="${item.paid}" class="orderStatus" data-id = "${item.id}" >${orderStatus}</a>
+        </td>
+        <td>
+          <input type="button" class="delSingleOrder-Btn js-orderDelete" data-id = "${item.id}" value="刪除">
+        </td>
+      </tr>`
+    })
+    orderList.innerHTML = str;
+  })
+};
+
+orderList.addEventListener("click",(e) => {
+  e.preventDefault();
+  const targetClass = e.target.getAttribute("class");
+  console.log(targetClass);
+  //刪除按鈕判斷
+  if (targetClass == "delSingleOrder-Btn js-orderDelete"){
+    alert("你點擊到刪除按鈕了");
+    return;
+  };
+  //訂單狀態按鈕判斷
+  if(targetClass == "orderStatus"){
+    let id = e.target.getAttribute("data-id");
+    deleteOrderItem(status,id)
+    return;
+  }
+});
+
+function deleteOrderItem(status, id) {
+  let newStatus;
+  newStatus = status === true ? false : true; //newStatus = !status;
+  
+  axios.put(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`, {
+    "data": {
+      "id": id,
+      "paid": newStatus
+    }
+  } ,{
+    headers: {
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    alert("修改成功");
+    getOrderList();
   })
 }
 
