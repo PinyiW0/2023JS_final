@@ -61,10 +61,10 @@ function renderC3_lv2(){
       }
     })
   })
-};
+
 //資料關聯
 let originAry = Object.keys(obj);
-console.log(originAry);
+
 let rankSortAry = [];
 //將訂單名稱和其金額push到rankSortAry
 originAry.forEach((item) => {
@@ -73,35 +73,35 @@ originAry.forEach((item) => {
   ary.push(obj[item]);
   rankSortAry.push(ary);
 });
-//進行排序
-rankSortAry.sort((a, b) => {
-  return b[1] - a[1];
-});
+  //進行排序
+  rankSortAry.sort((a, b) => {
+    return b[1] - a[1];
+  });
 
-if(rankSortAry.length > 3){
-  let otherTotal = 0;
-  rankSortAry.forEach((item, index) => {
-    if (index > 2) { //從第三筆資料之後做加總
-      otherTotal += rankSortAry[index][1]
-    }
-  })
-  //刪除第三筆之後的資料
-  rankSortAry.splice(3, rankSortAry.length - 1);
-  //寫入其他的資料
-  rankSortAry.push(['其他', otherTotal]);
-}
-
-c3.generate({
-  bindto: '#chart',
-  data: {
-    columns: rankSortAry,
-    type: 'pie',
-  },
-  color: {
-    pattern: ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"]
+  if(rankSortAry.length > 3){
+    let otherTotal = 0;
+    rankSortAry.forEach((item, index) => {
+      if (index > 2) { //從第三筆資料之後做加總
+        otherTotal += rankSortAry[index][1]
+      }
+    })
+    //刪除第三筆之後的資料
+    rankSortAry.splice(3, rankSortAry.length - 1);
+    //寫入其他的資料
+    rankSortAry.push(['其他', otherTotal]);
   }
-});
 
+  c3.generate({
+    bindto: '#chart',
+    data: {
+      columns: rankSortAry,
+      type: 'pie',
+    },
+    color: {
+      pattern: ["#301E5F", "#5434A7", "#9D7FEA", "#DACBFF"]
+    }
+  });
+};
 
 function getOrderList() {
   axios.get(`https://livejs-api.hexschool.io/api/livejs/v1/admin/${api_path}/orders`,{
