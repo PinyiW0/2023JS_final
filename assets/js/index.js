@@ -1,5 +1,6 @@
 import axios from "axios";
 import { api_path, token } from "./config";
+import { toThousands } from "./utils";
 
 //index 頁面產品清單列表
 const productList = document.querySelector('.productWrap');
@@ -36,8 +37,8 @@ function combineProductHTMLItem(item) {
         alt="">
       <a href="#" class="js-addCart" data-id="${item.id}">加入購物車</a>
       <h3>${item.title}</h3>
-      <del class="originPrice">NT$${item.origin_price}</del>
-      <p class="nowPrice">NT$${item.price}</p>
+      <del class="originPrice">NT$${toThousands(item.origin_price)}</del>
+      <p class="nowPrice">NT$${toThousands(item.price)}</p>
     </li>`
 };
 //渲染產品列表
@@ -102,7 +103,7 @@ productList.addEventListener("click", (e) => {
 function getCartList() {
   axios.get(cartListAPI)
     .then((res) => {
-      document.querySelector(".js-total").textContent = res.data.finalTotal; //計算總金額
+      document.querySelector(".js-total").textContent = toThousands(res.data.finalTotal) ; //計算總金額
       cartData = res.data.carts;
       let str = "";
       cartData.forEach((item) => {
@@ -113,9 +114,9 @@ function getCartList() {
               <p>${item.product.title}</p>
             </div>
           </td>
-          <td>NT$${item.product.price}</td>
+          <td>NT$${toThousands(item.product.price)}</td>
           <td>${item.quantity}</td>
-          <td>NT$${item.product.price * item.quantity}</td>
+          <td>NT$${toThousands(item.product.price * item.quantity)}</td>
           <td class="discardBtn">
             <a href="#" class="material-icons" data-id="${item.id}">
               clear
