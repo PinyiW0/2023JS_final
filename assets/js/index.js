@@ -1,6 +1,7 @@
 import axios from "axios";
 import { api_path, token } from "./config";
 import { toThousands } from "./utils";
+import { validate } from "validate.js";
 
 //index 頁面產品清單列表
 const productList = document.querySelector('.productWrap');
@@ -233,6 +234,11 @@ orderInfoBtn.addEventListener("click", (e) => {
     return;
   };
 
+  orderInfoForm.addEventListener('click', (e) => {
+    e.preventDefault();
+    orderFormValidation();
+  });
+ 
   axios
   .post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`, {
     "data": {
@@ -258,5 +264,60 @@ orderInfoBtn.addEventListener("click", (e) => {
 function clearInputs(inputs) {
   inputs.forEach((input) => {
     input.value = "";
+  });
+};
+
+//驗證功能
+const orderInfoForm = document.querySelector('.orderInfo-form');
+const inputsOrder = document.querySelectorAll("input[type=text],input[type=tel],input[type=email]");
+const constraints = {
+  姓名: {
+    presence: {
+      allowEmpty: false,
+      message: "是必填欄位"
+    }
+  },
+  電話: {
+    presence: {
+      allowEmpty: false,
+      message: "是必填欄位"
+    },
+    format: {
+      pattern: /^[0-9\-\+\s]+$/, 
+      message: "必須為有效的電話號碼格式"
+    }
+  },
+  Email: {
+    presence: {
+      allowEmpty: false,
+      message: "是必填欄位"
+    },
+    email: {
+      message: "必須為有效的電子郵件格式"
+    }
+  },
+  寄送地址: {
+    presence: {
+      allowEmpty: false,
+      message: "是必填欄位"
+    },
+    format: {
+      pattern: /[^]{3,}/, 
+      message: "必須為有效的地址格式"
+    }
+  },
+};
+function orderFormValidation() {
+  inputsOrder.forEach((item) => {
+    //預設為空值 不顯示
+    item.parentElement.nextElementSibling.textContent = "";
+    // 驗證回傳的內容
+    let errors = validate(orderInfoForm, constraints);
+    //渲染畫面
+    if (errors) {
+      Object.keys(errors).forEach((keys) => {
+        document.querySelector(`[data-message="${keys}"]`).textContent = errors[keys];
+      });
+    }
   });
 };
