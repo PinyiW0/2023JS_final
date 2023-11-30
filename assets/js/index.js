@@ -268,7 +268,7 @@ function clearInputs(inputs) {
 };
 
 //驗證功能
-const orderInfoForm = document.querySelector('.orderInfo-form');
+const orderInfoForm = document.querySelector('#orderInfo');
 const inputsOrder = document.querySelectorAll("input[type=text],input[type=tel],input[type=email]");
 const constraints = {
   姓名: {
@@ -309,10 +309,12 @@ const constraints = {
 };
 function orderFormValidation() {
   inputsOrder.forEach((item) => {
+    console.log(item);
     //預設為空值 不顯示
     item.parentElement.nextElementSibling.textContent = "";
     // 驗證回傳的內容
     let errors = validate(orderInfoForm, constraints);
+    console.log(orderInfoForm);
     //渲染畫面
     if (errors) {
       Object.keys(errors).forEach((keys) => {
