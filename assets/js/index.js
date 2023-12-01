@@ -211,30 +211,31 @@ const orderInfoBtn = document.querySelector(".orderInfo-btn");
 
 orderInfoBtn.addEventListener("click", (e) => {
   e.preventDefault();
+  if (orderFormValidation()) {
+    return;
+  };
   const customerNameInput = document.querySelector("#customerName");
   const customerPhoneInput = document.querySelector("#customerPhone");
   const customerEmailInput = document.querySelector("#customerEmail");
   const customerAddressInput = document.querySelector("#customerAddress");
   const customerTradeWayInput = document.querySelector("#tradeWay");
 
-  if (cartData.length == 0) {
-    alert("請加入購物車");
-    return;
-  }
-  const inputs =[
-    customerNameInput,
-    customerPhoneInput,
-    customerEmailInput,
-    customerAddressInput,
-    customerTradeWayInput
-  ];
-  const isEmpty = inputs.some((input) => input.value === "");
-  if (isEmpty){
-    orderFormValidation();
-    return;
-  };
-
-    
+  // if (cartData.length == 0) {
+  //   alert("請加入購物車");
+  //   return;
+  // }
+  // const inputs =[
+  //   customerNameInput,
+  //   customerPhoneInput,
+  //   customerEmailInput,
+  //   customerAddressInput,
+  //   customerTradeWayInput
+  // ];
+  // const isEmpty = inputs.some((input) => input.value === "");
+  // if (isEmpty){
+  //   orderFormValidation();
+  //   return;
+  // };
  
   axios
   .post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`, {
@@ -251,6 +252,7 @@ orderInfoBtn.addEventListener("click", (e) => {
   .then((res) => {
     alert("訂單建立成功");
     clearInputs(inputs);
+    orderForm.reset();
     getCartList();
   })
   .catch((err) => {
@@ -263,6 +265,9 @@ function clearInputs(inputs) {
     input.value = "";
   });
 };
+
+const orderForm = document.querySelector(".orderInfo-form");
+orderForm.reset();
 
 //驗證功能
 const orderInfoForm = document.querySelector('#orderInfo');
@@ -304,9 +309,10 @@ const constraints = {
     }
   },
 };
+// let errors = validate(orderInfoForm, constraints);
+// console.log(errors);
 function orderFormValidation() {
   inputsOrder.forEach((item) => {
-    console.log(item);
     //預設為空值 不顯示
     item.nextElementSibling.textContent = "";
     // 驗證回傳的內容
