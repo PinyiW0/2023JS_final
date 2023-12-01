@@ -230,14 +230,11 @@ orderInfoBtn.addEventListener("click", (e) => {
   ];
   const isEmpty = inputs.some((input) => input.value === "");
   if (isEmpty){
-    alert("請輸入訂單資訊");
+    orderFormValidation();
     return;
   };
 
-  orderInfoForm.addEventListener('click', (e) => {
-    e.preventDefault();
-    orderFormValidation();
-  });
+    
  
   axios
   .post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`, {
@@ -311,7 +308,7 @@ function orderFormValidation() {
   inputsOrder.forEach((item) => {
     console.log(item);
     //預設為空值 不顯示
-    item.parentElement.nextElementSibling.textContent = "";
+    item.nextElementSibling.textContent = "";
     // 驗證回傳的內容
     let errors = validate(orderInfoForm, constraints);
     console.log(orderInfoForm);
