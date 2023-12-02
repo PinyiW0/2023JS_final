@@ -100,7 +100,6 @@ productList.addEventListener("click", (e) => {
 
 
 //取得購物車列表
-
 function getCartList() {
   axios.get(cartListAPI)
     .then((res) => {
@@ -166,46 +165,6 @@ discardAllBtn.addEventListener('click', (e) => {
   })
 });
 
-//送出訂單
-// const orderInfoBtn = document.querySelector(".orderInfo-btn");
-// orderInfoBtn.addEventListener("click", (e) => {
-//   e.preventDefault();
-//   if(cartData.length == 0){
-//     alert("請加入購物車");
-//     return;
-//   }
-//   const customerName = document.querySelector("#customerName").value;
-//   const customerPhone = document.querySelector("#customerPhone").value;
-//   const customerEmail = document.querySelector("#customerEmail").value;
-//   const customerAddress = document.querySelector("#customerAddress").value;
-//   const customerTradeWay = document.querySelector("#tradeWay").value;
-//   if (customerName == "" || customerPhone == "" || customerEmail == "" || customerAddress == "" || customerTradeWay == "") {
-//     alert("請輸入訂單資訊");
-//     return;
-//   }
-//   axios.post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`,{
-//     "data": {
-//       "user": {
-//         "name": customerName,
-//         "tel": customerPhone,
-//         "email": customerEmail,
-//         "address": customerAddress,
-//         "payment": customerTradeWay
-//       }
-//     }
-//   }).then((res) => {
-//     alert("訂單建立成功");
-//     document.querySelector("#customerName").value = "";
-//     document.querySelector("#customerPhone").value = "";
-//     document.querySelector("#customerEmail").value = "";
-//     document.querySelector("#customerAddress").value = "";
-//     document.querySelector("#tradeWay").value = "ATM";
-//     getCartList();
-//   }).catch((err) => {
-//     console.log(err);
-//   });
-// })
-
 //送出訂單優化
 const orderInfoBtn = document.querySelector(".orderInfo-btn");
 
@@ -219,23 +178,6 @@ orderInfoBtn.addEventListener("click", (e) => {
   const customerEmailInput = document.querySelector("#customerEmail");
   const customerAddressInput = document.querySelector("#customerAddress");
   const customerTradeWayInput = document.querySelector("#tradeWay");
-
-  // if (cartData.length == 0) {
-  //   alert("請加入購物車");
-  //   return;
-  // }
-  // const inputs =[
-  //   customerNameInput,
-  //   customerPhoneInput,
-  //   customerEmailInput,
-  //   customerAddressInput,
-  //   customerTradeWayInput
-  // ];
-  // const isEmpty = inputs.some((input) => input.value === "");
-  // if (isEmpty){
-  //   orderFormValidation();
-  //   return;
-  // };
  
   axios
   .post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`, {
@@ -251,7 +193,7 @@ orderInfoBtn.addEventListener("click", (e) => {
   })
   .then((res) => {
     alert("訂單建立成功");
-    clearInputs(inputs);
+    //clearInputs(inputs);
     orderForm.reset();
     getCartList();
   })
@@ -259,12 +201,6 @@ orderInfoBtn.addEventListener("click", (e) => {
     console.log(err);
   });
 });
-
-function clearInputs(inputs) {
-  inputs.forEach((input) => {
-    input.value = "";
-  });
-};
 
 const orderForm = document.querySelector(".orderInfo-form");
 orderForm.reset();
@@ -309,8 +245,7 @@ const constraints = {
     }
   },
 };
-// let errors = validate(orderInfoForm, constraints);
-// console.log(errors);
+
 function orderFormValidation() {
   inputsOrder.forEach((item) => {
     //預設為空值 不顯示
@@ -326,3 +261,66 @@ function orderFormValidation() {
     }
   });
 };
+
+//送出訂單
+// const orderInfoBtn = document.querySelector(".orderInfo-btn");
+// orderInfoBtn.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   if(cartData.length == 0){
+//     alert("請加入購物車");
+//     return;
+//   }
+//   const customerName = document.querySelector("#customerName").value;
+//   const customerPhone = document.querySelector("#customerPhone").value;
+//   const customerEmail = document.querySelector("#customerEmail").value;
+//   const customerAddress = document.querySelector("#customerAddress").value;
+//   const customerTradeWay = document.querySelector("#tradeWay").value;
+//   if (customerName == "" || customerPhone == "" || customerEmail == "" || customerAddress == "" || customerTradeWay == "") {
+//     alert("請輸入訂單資訊");
+//     return;
+//   }
+//   axios.post(`https://livejs-api.hexschool.io/api/livejs/v1/customer/${api_path}/orders`,{
+//     "data": {
+//       "user": {
+//         "name": customerName,
+//         "tel": customerPhone,
+//         "email": customerEmail,
+//         "address": customerAddress,
+//         "payment": customerTradeWay
+//       }
+//     }
+//   }).then((res) => {
+//     alert("訂單建立成功");
+//     document.querySelector("#customerName").value = "";
+//     document.querySelector("#customerPhone").value = "";
+//     document.querySelector("#customerEmail").value = "";
+//     document.querySelector("#customerAddress").value = "";
+//     document.querySelector("#tradeWay").value = "ATM";
+//     getCartList();
+//   }).catch((err) => {
+//     console.log(err);
+//   });
+// })
+//清理表單
+// function clearInputs(inputs) {
+//   inputs.forEach((input) => {
+//     input.value = "";
+//   });
+// };
+//判斷加入購物車後的條件
+// if (cartData.length == 0) {
+//   alert("請加入購物車");
+//   return;
+// }
+// const inputs =[
+//   customerNameInput,
+//   customerPhoneInput,
+//   customerEmailInput,
+//   customerAddressInput,
+//   customerTradeWayInput
+// ];
+// const isEmpty = inputs.some((input) => input.value === "");
+// if (isEmpty){
+//   orderFormValidation();
+//   return;
+// };
