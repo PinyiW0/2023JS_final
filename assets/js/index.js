@@ -146,7 +146,7 @@ cartList.addEventListener('click', (e) => {
     alert("刪除成功！(๑´ㅂ`๑)");
     getCartList();
   })
-  .catch(function (response) {
+    .catch((res) => {
     alert("沒有刪除成功(◔⊖◔)つ")
   })
 });
